@@ -1,6 +1,15 @@
 # imggen
 
-A shell script to create simple placeholder images.
+A shell script to create simple placeholder images, like you might use for textures. Requires [ImageMagick](https://www.imagemagick.org/script/index.php), which you can get via [brew](https://brew.sh):
+
+```
+brew install imagemagick
+```
+
+You can then invoke the `imggen` file as described below. I'd recommend symlinking this to `/usr/local/bin`:
+```
+ln -s /path/to/original/imggen /usr/local/bin/imggen
+```
 
 # Usage
 
@@ -34,6 +43,11 @@ Options:
   -t   --text          String to display over size information
   -out --out-file      Name of output file (no extension)
 ```
+
+# Todo
+
+* Make this available via Homebrew with dependencies.
+* Better font size handling.
 
 # License
 

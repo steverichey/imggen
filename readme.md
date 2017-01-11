@@ -44,6 +44,10 @@ Options:
   -out --out-file      Name of output file (no extension)
 ```
 
+# Output
+
+![Sample image](./sample.png)
+
 # Todo
 
 * Make this available via Homebrew with dependencies.

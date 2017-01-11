@@ -53,6 +53,7 @@ Options:
 * Make this available via Homebrew with dependencies.
 * Better font size handling.
 * (Optionally?) names files with suffix of dimensions.
+* Unit tests
 
 # License
 

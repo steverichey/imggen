@@ -69,9 +69,6 @@ then
   HEIGHT="${1}"
   check_int "${WIDTH}" "Width must be an integer value"
   check_int "${HEIGHT}" "Height must be an integer value"
-
-  echo ${WIDTH}
-  echo ${HEIGHT}
 else
   while [ $# -gt 0 ]
   do

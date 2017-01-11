@@ -1,0 +1,190 @@
+#!/bin/sh
+
+set -e
+
+# default configurable values
+WIDTH=256
+HEIGHT=512
+OFFSET=10
+PLUS_SIZE=16
+STROKE_WIDTH=4
+FONT_SIZE=24
+FOREGROUND='white'
+BACKGROUND='orange'
+FONT='Arial'
+TEXT='Placeholder'
+OUT_FILE='out'
+
+# flags for user-specified values
+SET_FONT_SIZE=1
+SET_STROKE_WIDTH=1
+
+# print usage info and exit
+usage()
+{
+  echo "Usage: imggen [-s 256x512] [-o 10] [-p 16] [-sw 4] [-fs 24]"
+  echo "              [-fg white] [-bg orange] [-f Arial] [-t Placeholder]"
+  echo "              [-out out]"
+  echo "       imggen 256"
+  echo ""
+  echo "Options:"
+  echo "  -h   --help          Print this help info and exit"
+  echo "  -s   --size          Set to width x height of desired output"
+  echo "  -o   --offset        Distance from inner box to edge of image"
+  echo "  -p   --plus          Width and height of center indicator"
+  echo "  -sw  --stroke-width  Width of stroke of all lines"
+  echo "  -fs  --font-size     Size of font"
+  echo "  -fg  --foreground    Color of text, square, center indicator"
+  echo "  -bg  --background    Color of background"
+  echo "  -f   --font          Name of font to use for text"
+  echo "  -t   --text          String to display over size information"
+  echo "  -out --out-file      Name of output file (no extension)"
+  exit 1
+}
+
+# print second arg and exit if first arg is not an integer
+check_int()
+{
+  case $1 in
+    ''|*[!0-9]*)
+      echo $2
+      exit 1
+      ;;
+    *)
+      ;;
+  esac
+}
+
+if [ $# -eq 0 ]
+then
+  usage
+elif [ $# -eq 1 ]
+then
+  if [ "$1" == "-h" ]
+  then
+    usage
+  fi
+
+  WIDTH="${1}"
+  HEIGHT="${1}"
+  check_int "${WIDTH}" "Width must be an integer value"
+  check_int "${HEIGHT}" "Height must be an integer value"
+
+  echo ${WIDTH}
+  echo ${HEIGHT}
+else
+  while [ $# -gt 0 ]
+  do
+    case "${1}" in
+      '-h'|'--help')
+        usage
+        ;;
+      '-s'|'--size')
+        SIZES=(${2//x/ })
+        WIDTH="${SIZES[0]}"
+        HEIGHT="${SIZES[1]}"
+        check_int "${WIDTH}" "Width must be an integer value"
+        check_int "${HEIGHT}" "Height must be an integer value"
+        shift
+        ;;
+      '-o'|'--offset')
+        OFFSET="${2}"
+        check_int "${OFFSET}" "Offset must be an integer value"
+        shift
+        ;;
+      '-p'|'--plus')
+        PLUS_SIZE="${2}"
+        check_int "${PLUS_SIZE}" "Plus size must be an integer value"
+        shift
+        ;;
+      '-sw'|'--stroke-width')
+        STROKE_WIDTH="${2}"
+        check_int "${STROKE_WIDTH}" "Stroke width must be an integer value"
+        SET_STROKE_WIDTH=0
+        shift
+        ;;
+      '-fs'|'--font-size')
+        FONT_SIZE="${2}"
+        check_int "${FONT_SIZE}" "Font size must be an integer value"
+        SET_FONT_SIZE=0
+        shift
+        ;;
+      '-fg'|'--foreground')
+        FOREGROUND="${2}"
+        shift
+        ;;
+      '-bg'|'--background')
+        BACKGROUND="${2}"
+        shift
+        ;;
+      '-f'|'--font')
+        FONT="${2}"
+        shift
+        ;;
+      '-t'|'--text')
+        TEXT="${2}"
+        shift
+        ;;
+      '-out'|'--out-file')
+        OUT_FILE="${2}"
+        shift
+        ;;
+    esac
+    shift
+  done
+fi
+
+# if user didn't specify font size, and image is small, make font small
+if [ ${SET_FONT_SIZE} -ne 0 ]
+then
+  if [ ${WIDTH} -lt 256 ]
+  then
+    FONT_SIZE=12
+  fi
+fi
+
+# if user didn't specfiy stroke width, and image is small, make stroke small
+if [ ${SET_STROKE_WIDTH} -ne 0 ]
+then
+  if [ ${WIDTH} -lt 256 ]
+  then
+    STROKE_WIDTH=1
+  fi
+fi
+
+# calculated values
+INNER_WIDTH=`expr ${WIDTH} - ${OFFSET} - 1`
+INNER_HEIGHT=`expr ${HEIGHT} - ${OFFSET} - 1`
+CENTER_X=`expr ${WIDTH} / 2`
+CENTER_Y=`expr ${HEIGHT} / 2`
+PLUS_MIN_X=`expr ${CENTER_X} - ${PLUS_SIZE}`
+PLUS_MAX_X=`expr ${CENTER_X} + ${PLUS_SIZE}`
+PLUS_MIN_Y=`expr ${CENTER_Y} - ${PLUS_SIZE}`
+PLUS_MAX_Y=`expr ${CENTER_Y} + ${PLUS_SIZE}`
+INSET_WIDTH=`expr ${WIDTH} - 1`
+INSET_HEIGHT=`expr ${HEIGHT} - 1`
+
+# todo: find a font-size-independent way to do this
+TEXT_X_OFFSET=`expr ${OFFSET} + 6`
+TEXT_Y_OFFSET=`expr ${OFFSET} + ${FONT_SIZE} + 2`
+TEXT_Y_OFFSET_2=`expr ${TEXT_Y_OFFSET} + ${FONT_SIZE}`
+
+convert \
+  -size ${WIDTH}x${HEIGHT} xc:${BACKGROUND} \
+  -fill none \
+  -stroke ${FOREGROUND} \
+  -strokewidth ${STROKE_WIDTH} \
+  -draw "rectangle ${OFFSET},${OFFSET} ${INNER_WIDTH},${INNER_HEIGHT}" \
+  -draw "line ${PLUS_MIN_X},${CENTER_Y} ${PLUS_MAX_X},${CENTER_Y}"  \
+  -draw "line ${CENTER_X},${PLUS_MIN_Y} ${CENTER_X}, ${PLUS_MAX_Y}" \
+  -stroke none \
+  -fill ${FOREGROUND} \
+  -font ${FONT} \
+  -pointsize ${FONT_SIZE} \
+  -annotate +${TEXT_X_OFFSET}+${TEXT_Y_OFFSET} ${TEXT} \
+  -annotate +${TEXT_X_OFFSET}+${TEXT_Y_OFFSET_2} ${WIDTH}x${HEIGHT} \
+  -strokewidth 1 \
+  -fill none \
+  -stroke black \
+  -draw "stroke-opacity 0.2 rectangle 0,0 ${INSET_WIDTH},${INSET_HEIGHT}" \
+  ${OUT_FILE}.png

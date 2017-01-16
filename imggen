@@ -18,6 +18,7 @@ OUT_FILE='out'
 # flags for user-specified values
 SET_FONT_SIZE=1
 SET_STROKE_WIDTH=1
+DIM_SUFFIX=1
 
 # print usage info and exit
 usage()
@@ -39,6 +40,7 @@ usage()
   echo "  -f   --font          Name of font to use for text"
   echo "  -t   --text          String to display over size information"
   echo "  -out --out-file      Name of output file (no extension)"
+  echo "  -ds  --dim-suffix    Whether or not to add dimension suffix to filename"
   exit 1
 }
 
@@ -53,6 +55,16 @@ check_int()
     *)
       ;;
   esac
+}
+
+# print second arg and exit if first arg is not 0 or 1
+check_bool()
+{
+  if [ "${1}" != "0" ] && [ "${1}" != "1" ]
+  then
+    echo "${2}"
+    exit 1
+  fi
 }
 
 if [ $# -eq 0 ]
@@ -126,6 +138,21 @@ else
         OUT_FILE="${2}"
         shift
         ;;
+      '-ds'|'--dim-suffix')
+        DIM_SUFFIX="${2}"
+
+        if [ "${DIM_SUFFIX}" == "false" ]
+        then
+          DIM_SUFFIX=0
+        elif [ "${DIM_SUFFIX}" == "true" ]
+        then
+          DIM_SUFFIX=1
+        fi
+
+        echo "${DIM_SUFFIX}"
+        check_bool "${DIM_SUFFIX}" "Dimension suffix accepted values: 0, 1, true, false"
+        shift
+        ;;
     esac
     shift
   done
@@ -140,7 +167,7 @@ then
   fi
 fi
 
-# if user didn't specfiy stroke width, and image is small, make stroke small
+# if user didn't specify stroke width, and image is small, make stroke small
 if [ ${SET_STROKE_WIDTH} -ne 0 ]
 then
   if [ ${WIDTH} -lt 256 ]
@@ -165,6 +192,11 @@ INSET_HEIGHT=`expr ${HEIGHT} - 1`
 TEXT_X_OFFSET=`expr ${OFFSET} + 6`
 TEXT_Y_OFFSET=`expr ${OFFSET} + ${FONT_SIZE} + 2`
 TEXT_Y_OFFSET_2=`expr ${TEXT_Y_OFFSET} + ${FONT_SIZE}`
+
+if [ ${DIM_SUFFIX} -ne 0 ]
+then
+  OUT_FILE="${OUT_FILE}_${WIDTH}x${HEIGHT}"
+fi
 
 convert \
   -size ${WIDTH}x${HEIGHT} xc:${BACKGROUND} \

@@ -30,10 +30,10 @@ verify()
 # rm test_output/*
 
 # Tests
-result=`imggen`
+result=`./imggen`
 verify ${?} 1 "No parameters should result in failure"
 
-result=`imggen 333`
+result=`./imggen 333`
 verify ${?} 0 "Single dimension parameter should succeed"
 
 result=`test -f out_333x333.png`

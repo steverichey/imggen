@@ -1,12 +1,30 @@
 # imggen [![Build Status](https://travis-ci.org/steverichey/imggen.svg?branch=master)](https://travis-ci.org/steverichey/imggen)
 
-A shell script to create simple placeholder images, like you might use for textures. Requires [ImageMagick](https://www.imagemagick.org/script/index.php), which you can get via [brew](https://brew.sh):
+A shell script to create simple placeholder images, like you might use for textures.
+
+# Setup
+
+Requires [ImageMagick](https://www.imagemagick.org/script/index.php), which you can get via your system package manager.
+
+## macOS
+
+On macOS you can get ImageMagick via [brew](https://brew.sh):
 
 ```
 brew install imagemagick
 ```
 
-You can then invoke the `imggen` file as described below. I'd recommend symlinking this to `/usr/local/bin`:
+## Linux
+
+On Linux you can use `apt-get` or the relevant package manager for your distribution:
+
+```
+sudo apt-get install imagemagick
+```
+
+# Linking
+
+After installing, I'd recommend symlinking this to `/usr/local/bin`:
 ```
 ln -s /path/to/original/imggen /usr/local/bin/imggen
 ```

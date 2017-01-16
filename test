@@ -1,0 +1,56 @@
+#!/bin/sh
+
+pass_count=0
+fail_count=0
+
+# usage: verify actual_value expected_value [error_message]
+verify()
+{
+  if [ ! ${1} ]
+  then
+    echo "[verify] Missing required parameter: comparison value"
+  fi
+
+  if [ "${1}" -ne "${2}" ]
+  then
+    if [ "${3}" ]
+    then
+      echo "[verify] Failed: ${3}, expected: ${2}, actual: ${1}"
+    else
+      echo "[verify] Failed, expected: ${2}, actual: ${1}"
+    fi
+
+    fail_count=`expr ${fail_count} + 1`
+  else
+    pass_count=`expr ${pass_count} + 1`
+  fi
+}
+
+# Clear test image folder
+rm test_output/*
+
+# Tests
+result=`imggen`
+verify ${?} 1 "No parameters should result in failure"
+
+result=`imggen 333`
+verify ${?} 0 "Single dimension parameter should succeed"
+
+result=`test -f out_333x333.png`
+verify ${?} 0 "Default file should be out_[width]x[height].png"
+
+result=`identify -format '%w' out_333x333.png`
+verify ${result} 333 "Single dimension parameter should create image of correct width"
+
+result=`identify -format '%h' out_333x333.png`
+verify ${result} 333 "Single dimension parameter should create image of correct height"
+
+# Final result
+echo "Testing complete. ${pass_count} passed, ${fail_count} failed."
+
+if [ ${fail_count} -gt 0 ]
+then
+  exit 1
+else
+  exit 0
+fi

@@ -27,23 +27,39 @@ verify()
 }
 
 # Clear test image folder
-# rm test_output/*
+# rm test_output/*.png
 
 # Tests
 result=`./imggen`
 verify ${?} 1 "No parameters should result in failure"
 
-result=`./imggen 333`
-verify ${?} 0 "Single dimension parameter should succeed"
+single_dimension="333"
 
-result=`test -f placeholder_333x333.png`
+result=`./imggen "${single_dimension}"`
+verify ${?} 0 "Single parameter with one dimension should succeed"
+
+result=`test -f placeholder_"${single_dimension}"x"${single_dimension}".png`
 verify ${?} 0 "Default file should be placeholder_[width]x[height].png"
 
-result=`identify -format '%w' placeholder_333x333.png`
+result=`identify -format '%w' placeholder_"${single_dimension}"x"${single_dimension}".png`
 verify ${result} 333 "Single dimension parameter should create image of correct width"
 
-result=`identify -format '%h' placeholder_333x333.png`
+result=`identify -format '%h' placeholder_"${single_dimension}"x"${single_dimension}".png`
 verify ${result} 333 "Single dimension parameter should create image of correct height"
+
+both_dimensions="47x84"
+
+result=`./imggen "${both_dimensions}"`
+verify ${?} 0 "Single parameter with width and height should succeed"
+
+result=`test -f placeholder_"${both_dimensions}".png`
+verify ${?} 0 "Default file should be placeholder_[width]x[height].png"
+
+result=`identify -format '%w' placeholder_"${both_dimensions}".png`
+verify ${result} 47 "Both dimension parameter should create image of correct width"
+
+result=`identify -format '%h' placeholder_"${both_dimensions}".png`
+verify ${result} 84 "Both dimension parameter should create image of correct height"
 
 # Final result
 echo "Testing complete. ${pass_count} passed, ${fail_count} failed."

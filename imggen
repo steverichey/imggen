@@ -78,8 +78,15 @@ then
     usage
   fi
 
-  WIDTH="${1}"
-  HEIGHT="${1}"
+  SIZES=(${1//x/ })
+  WIDTH="${SIZES[0]}"
+  HEIGHT="${SIZES[1]}"
+
+  if [ ! ${HEIGHT} ]
+  then
+    HEIGHT="${WIDTH}"
+  fi
+
   check_int "${WIDTH}" "Width must be an integer value"
   check_int "${HEIGHT}" "Height must be an integer value"
 else
@@ -195,15 +202,14 @@ TEXT_X_OFFSET=`expr ${OFFSET} + 6`
 TEXT_Y_OFFSET=`expr ${OFFSET} + ${FONT_SIZE} + 2`
 TEXT_Y_OFFSET_2=`expr ${TEXT_Y_OFFSET} + ${FONT_SIZE}`
 
+# use lowercase text as filename prefix if none provided
 if [ ${SET_FILE_NAME} -ne 0 ]
 then
-  echo ${OUT_FILE}
-  echo ${TEXT}
   OUT_FILE=`echo "${TEXT}" | tr "[A-Z]" "[a-z]"`
   OUT_FILE=(${OUT_FILE// /_})
-  echo ${OUT_FILE}
 fi
 
+# use dimensions as filename suffix unless specified otherwise
 if [ ${DIM_SUFFIX} -ne 0 ]
 then
   OUT_FILE="${OUT_FILE}_${WIDTH}x${HEIGHT}"

@@ -13,11 +13,12 @@ FOREGROUND='white'
 BACKGROUND='orange'
 FONT='Helvetica'
 TEXT='Placeholder'
-OUT_FILE='out'
+OUT_FILE='placeholder'
 
 # flags for user-specified values
 SET_FONT_SIZE=1
 SET_STROKE_WIDTH=1
+SET_FILE_NAME=1
 DIM_SUFFIX=1
 
 # print usage info and exit
@@ -136,6 +137,7 @@ else
         ;;
       '-out'|'--out-file')
         OUT_FILE="${2}"
+        SET_FILE_NAME=0
         shift
         ;;
       '-ds'|'--dim-suffix')
@@ -193,6 +195,15 @@ TEXT_X_OFFSET=`expr ${OFFSET} + 6`
 TEXT_Y_OFFSET=`expr ${OFFSET} + ${FONT_SIZE} + 2`
 TEXT_Y_OFFSET_2=`expr ${TEXT_Y_OFFSET} + ${FONT_SIZE}`
 
+if [ ${SET_FILE_NAME} -ne 0 ]
+then
+  echo ${OUT_FILE}
+  echo ${TEXT}
+  OUT_FILE=`echo "${TEXT}" | tr "[A-Z]" "[a-z]"`
+  OUT_FILE=(${OUT_FILE// /_})
+  echo ${OUT_FILE}
+fi
+
 if [ ${DIM_SUFFIX} -ne 0 ]
 then
   OUT_FILE="${OUT_FILE}_${WIDTH}x${HEIGHT}"
@@ -210,10 +221,10 @@ convert \
   -fill ${FOREGROUND} \
   -font ${FONT} \
   -pointsize ${FONT_SIZE} \
-  -annotate +${TEXT_X_OFFSET}+${TEXT_Y_OFFSET} ${TEXT} \
+  -annotate +${TEXT_X_OFFSET}+${TEXT_Y_OFFSET} "${TEXT}" \
   -annotate +${TEXT_X_OFFSET}+${TEXT_Y_OFFSET_2} ${WIDTH}x${HEIGHT} \
   -strokewidth 1 \
   -fill none \
   -stroke black \
   -draw "stroke-opacity 0.2 rectangle 0,0 ${INSET_WIDTH},${INSET_HEIGHT}" \
-  ${OUT_FILE}.png
+  "${OUT_FILE}.png"

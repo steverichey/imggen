@@ -36,13 +36,13 @@ verify ${?} 1 "No parameters should result in failure"
 result=`./imggen 333`
 verify ${?} 0 "Single dimension parameter should succeed"
 
-result=`test -f out_333x333.png`
-verify ${?} 0 "Default file should be out_[width]x[height].png"
+result=`test -f placeholder_333x333.png`
+verify ${?} 0 "Default file should be placeholder_[width]x[height].png"
 
-result=`identify -format '%w' out_333x333.png`
+result=`identify -format '%w' placeholder_333x333.png`
 verify ${result} 333 "Single dimension parameter should create image of correct width"
 
-result=`identify -format '%h' out_333x333.png`
+result=`identify -format '%h' placeholder_333x333.png`
 verify ${result} 333 "Single dimension parameter should create image of correct height"
 
 # Final result

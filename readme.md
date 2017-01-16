@@ -42,17 +42,17 @@ Options:
   -f   --font          Name of font to use for text
   -t   --text          String to display over size information
   -out --out-file      Name of output file (no extension)
+  -ds  --dim-suffix    Whether or not to add dimension suffix to filename
 ```
 
 # Output
 
-![Sample image](./sample.png)
+![Sample image](./test_input/placeholder_512x512.png)
 
 # Todo
 
-* Make this available via Homebrew with dependencies.
-* Better font size handling.
-* (Optionally?) names files with suffix of dimensions.
+* Make this available via Homebrew with dependencies
+* Better font size handling
 * Unit tests
 * Optional grid patterns
 

@@ -27,7 +27,7 @@ verify()
 }
 
 # Clear test image folder
-rm test_output/*
+# rm test_output/*
 
 # Tests
 result=`imggen`

@@ -117,6 +117,8 @@ verify ${?} 0 "Image created with just test should succeed"
 result=`test -f hello_world_256x512.png`
 verify ${?} 0 "Image created with just text should use text as name"
 
+ls -la
+
 # Final result
 echo "Testing complete. ${pass_count} passed, ${fail_count} failed."
 

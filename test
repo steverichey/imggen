@@ -103,6 +103,7 @@ result=`./imggen 512`
 verify ${?} 0 "'imggen 512' should succeed"
 
 image_hash_compare placeholder_512x512.png test_input/placeholder_512x512.png
+openssl base64 -in placeholder_512x512.png
 verify ${?} 0 "Image created with 'imggen 512' should match 'placeholder_512x512'"
 
 result=`./imggen 212`

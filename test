@@ -102,13 +102,13 @@ verify ${result} 577 "Both dimension parameter should create image of correct he
 result=`./imggen 512`
 verify ${?} 0 "'imggen 512' should succeed"
 
-result=$(image_hash_compare placeholder_512x512.png test_input/placeholder_512x512.png)
+image_hash_compare placeholder_512x512.png test_input/placeholder_512x512.png
 verify ${?} 0 "Image created with 'imggen 512' should match 'placeholder_512x512'"
 
 result=`./imggen 212`
 verify ${?} 0 "'imggen 212' should succeed"
 
-result=$(image_hash_compare placeholder_212x212.png test_input/placeholder_512x512.png)
+image_hash_compare placeholder_212x212.png test_input/placeholder_512x512.png
 verify ${?} 1 "Image created with 'imggen 212' should not match 'placeholder_512x512'"
 
 result=`./imggen -t "Hello World"`
@@ -116,8 +116,6 @@ verify ${?} 0 "Image created with just test should succeed"
 
 result=`test -f hello_world_256x512.png`
 verify ${?} 0 "Image created with just text should use text as name"
-
-ls -la
 
 # Final result
 echo "Testing complete. ${pass_count} passed, ${fail_count} failed."

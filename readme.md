@@ -1,4 +1,4 @@
-# imggen
+# imggen [![Build Status](https://travis-ci.org/steverichey/imggen.svg?branch=master)](https://travis-ci.org/steverichey/imggen)
 
 A shell script to create simple placeholder images, like you might use for textures. Requires [ImageMagick](https://www.imagemagick.org/script/index.php), which you can get via [brew](https://brew.sh):
 

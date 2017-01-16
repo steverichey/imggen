@@ -1,0 +1,3 @@
+before_install:
+ - brew update ; brew upgrade ; brew install imagemagick
+script: ./test

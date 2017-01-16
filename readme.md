@@ -53,7 +53,7 @@ Options:
 
 * Make this available via Homebrew with dependencies
 * Better font size handling
-* Unit tests
+* More unit tests
 * Optional grid patterns
 
 # License

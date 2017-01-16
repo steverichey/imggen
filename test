@@ -29,8 +29,6 @@ verify()
 # Clear test image folder
 # rm test_output/*
 
-convert -list font
-
 # Tests
 result=`./imggen`
 verify ${?} 1 "No parameters should result in failure"

@@ -11,7 +11,7 @@ STROKE_WIDTH=4
 FONT_SIZE=24
 FOREGROUND='white'
 BACKGROUND='orange'
-FONT='Arial'
+FONT='Helvetica'
 TEXT='Placeholder'
 OUT_FILE='out'
 

@@ -33,10 +33,18 @@ hash_compare()
   hash1=$(identify -quiet -format "%#" "${1}")
   hash2=$(identify -quiet -format "%#" "${2}")
 
+  echo "-- HASH COMPARE --"
+  echo "${1}"
+  echo "${2}"
+  echo "${hash1}"
+  echo "${hash2}"
+
   if [ "${hash1}" = "${hash2}" ]
   then
+    echo "-- SAME --"
     return 0
   else
+    echo "-- NOT SAME --"
     return 1
   fi
 }

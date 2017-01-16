@@ -30,10 +30,11 @@ verify()
 # usage: hash_compare image_name_1.png image_name_2.png
 hash_compare()
 {
+  echo "-- HASH COMPARE --"
+  
   hash1=$(identify -quiet -format "%#" "${1}")
   hash2=$(identify -quiet -format "%#" "${2}")
 
-  echo "-- HASH COMPARE --"
   echo "${1}"
   echo "${2}"
   echo "${hash1}"

@@ -61,6 +61,20 @@ verify ${result} 47 "Both dimension parameter should create image of correct wid
 result=`identify -format '%h' placeholder_"${both_dimensions}".png`
 verify ${result} 84 "Both dimension parameter should create image of correct height"
 
+both_dimensions="133x577"
+
+result=`./imggen -s "${both_dimensions}"`
+verify ${?} 0 "-s should succeed with ${both_dimensions}"
+
+result=`test -f placeholder_"${both_dimensions}".png`
+verify ${?} 0 "Default file should be placeholder_[width]x[height].png"
+
+result=`identify -format '%w' placeholder_"${both_dimensions}".png`
+verify ${result} 133 "Both dimension parameter should create image of correct width"
+
+result=`identify -format '%h' placeholder_"${both_dimensions}".png`
+verify ${result} 577 "Both dimension parameter should create image of correct height"
+
 # Final result
 echo "Testing complete. ${pass_count} passed, ${fail_count} failed."
 

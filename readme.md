@@ -44,10 +44,17 @@ Options:
   -out --out-file      Name of output file (no extension)
 ```
 
+# Output
+
+![Sample image](./sample.png)
+
 # Todo
 
 * Make this available via Homebrew with dependencies.
 * Better font size handling.
+* (Optionally?) names files with suffix of dimensions.
+* Unit tests
+* Optional grid patterns
 
 # License
 
